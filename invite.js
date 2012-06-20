@@ -207,8 +207,9 @@ $(function(){
 			ctx.font='28px "VideoPhreak"';
 			ctx.fillText("Friday, 29th of June 2012, Whitespace.", x, y);
 			y += 30;
+			ctx.font='22px "VideoPhreak"';
 			ctx.fillText("You *are* invited. Resistance *is* futile.", x, y);
-			y += 30;
+			y += 24;
 			ctx.font='16px "VideoPhreak"';
 			ctx.fillText("Coded by sandb.", x, y);
 		}
