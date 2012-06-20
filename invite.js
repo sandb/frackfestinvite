@@ -180,7 +180,7 @@ $(function(){
 		if (secs > 20 && !clickable) {
 			clickable = true;
 			$("#canvas").click(function() {
-				window.location="http://0x20.be/FrackFest_20120729";
+				window.location="http://0x20.be/FrackFest_is_a_feature";
 			});
 			$("#canvas").css('cursor', 'pointer');
 		}
