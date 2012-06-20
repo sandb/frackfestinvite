@@ -16,6 +16,13 @@ function rr(range) {
 	return parseInt(r(range));
 }
 
+function zeroPad(str, length) {
+	var zeros = "0000000000";
+	while (length - str.length > zeros.length) 
+		str = zeros + str;
+	return zeros.substring(0, length-str.length) + str;
+}
+
 function loadimg(url) {
 	var img = new Image();
 	img.src = url;
@@ -66,7 +73,7 @@ $(function(){
 				x: r(w),
 				y: r(h),
 				r: r(50),
-				c: col, //r(0xffffff),
+				c: "#" + zeroPad(parseInt(col).toString(16), 6),
 				dx: rz(10) - 5,
 				dy: rz(10) - 5
 			}
@@ -161,7 +168,7 @@ $(function(){
 			fs = secs * 100;
 			for (var i = 0; i < p.length; i++) {
 				q = fisheye(p[i], {x:w/2, y:h/2});
-				ctx.fillStyle = "#" + parseInt(q.c).toString(16);
+				ctx.fillStyle = q.c;
 				ctx.beginPath();
 				ctx.arc(q.x, q.y, q.r, 0, 2*Math.PI); 
 				ctx.closePath();
@@ -218,7 +225,7 @@ $(function(){
 			fs = (10 + Math.abs(((secs - 30) % 20) - 10)) * 100;
 			for (var i = 0; i < p.length; i++) {
 				q = fisheye(p[i], {x:w/2, y:h/2});
-				ctx.fillStyle = "#" + parseInt(q.c).toString(16);
+				ctx.fillStyle = q.c;
 				ctx.beginPath();
 				ctx.arc(q.x, q.y, q.r, 0, 2*Math.PI); 
 				ctx.closePath();
