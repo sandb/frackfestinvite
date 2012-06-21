@@ -33,6 +33,12 @@ function loadimg(url) {
 	return img;
 }
 
+function FakeAudio() {
+	this.play = function() {
+		console.log("playing");
+	};
+}
+
 $(function(){
 	console.log("invite.js started");
 
@@ -59,11 +65,15 @@ $(function(){
 	}
 
 	//audio
-	var aw = new Audio("aw.ogg");	
-	aw.loop = true;
+	if (typeof(Audio) != "undefined") {
+		var aw = new Audio("aw.ogg");	
+		aw.loop = true;
+	} else {
+		var aw = new FakeAudio();
+	}
+	aw.playing = false;
 
 	var clickable = false;
-	var playing = false;
 
 	initpoints = function() {	
 		for (var i = 0; i < 1000; i++) {
@@ -233,8 +243,8 @@ $(function(){
 			}
 			updatepoints();
 		}
-		if (secs > 4 && !playing) {
-			playing = true;
+		if (secs > 4 && !aw.playing) {
+			aw.playing = true;
 			aw.play();
 		}
 		setTimeout("draw()", 30);
