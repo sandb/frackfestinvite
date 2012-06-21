@@ -52,9 +52,6 @@ $(function(){
 	// fisheye size
 	var fs = 0;
 
-	// mouse
-	var mouse = { x: 0, y: 0, s: 0, t: millis() };
-
 	// logo
 	var logo = loadimg("wl.png");
 
@@ -90,11 +87,6 @@ $(function(){
 		}
 	};
 	
-	$("#canvas").mousemove(function(e) {
-		mouse.x = e.pageX;
-		mouse.y = e.pageY;
-	});
-
 	fisheye = function(q, center) {
 		qd = {
 			x: q.x - center.x,
@@ -116,20 +108,6 @@ $(function(){
 		qd.y += center.y;
 		return qd;
 	};
-	
-	follow = function(q, center) {
-		qd = {
-			x: q.x - center.x,
-			y: q.y - center.y,
-		}
-		d = Math.sqrt(qd.x * qd.x + qd.y * qd.y);
-		if (d > fs) return q;
-		if (d < 1) return q; 
-		s = 0.97 + ((d/fs) * 0.03);
-		q.x = center.x + qd.x * s;
-		q.y = center.y + qd.y * s;
-		return q;
-	}
 	
 	updatepoints = function() {
 		for (var i = 0; i < p.length; i++) {
@@ -173,8 +151,8 @@ $(function(){
 		ctx.fillRect(0,0,w,h);
 		secs = (millis() - t) / 1000;
 		ctx.globalAlpha = 1;
-		ctx.globalCompositeOperation = "source-over";
 		if (secs < 20) {
+			ctx.globalCompositeOperation = "source-over";
 			fs = secs * 100;
 			for (var i = 0; i < p.length; i++) {
 				q = fisheye(p[i], {x:w/2, y:h/2});
@@ -186,8 +164,8 @@ $(function(){
 			}
 			updatepoints();
 		}
-		ctx.globalCompositeOperation = "xor";
 		if (logo.loaded) {
+			ctx.globalCompositeOperation = "xor";
 			var scale = 20 - secs;
 			if (scale < 1) scale = 1;
 			var hw = logo.width * scale / 2;
@@ -202,6 +180,7 @@ $(function(){
 			$("#canvas").css('cursor', 'pointer');
 		}
 		if (secs > 20) {
+			ctx.globalCompositeOperation = "xor";
 			var pic = pics[parseInt(secs/2) % pics.length];
 			var scale = w / pic.width;
 			scale *= 1 + secs % 2;
@@ -209,11 +188,11 @@ $(function(){
 			var sh = pic.height * scale;
 			ctx.drawImage(pic, (w-sw)/2, (h-sh)/2, sw, sh);
 		}
-		ctx.globalCompositeOperation = "source-over";
 		if (secs > 20) {
 			var alpha = 1-((23-secs)/3);
 			if (alpha > 1) alpha = 1;			
 			ctx.globalAlpha = alpha;
+			ctx.globalCompositeOperation = "source-over";
 			ctx.fillStyle = "#333333";
 			ctx.textAlign = "center";
 			var x = w/2;
@@ -230,8 +209,8 @@ $(function(){
 			ctx.font='16px "VideoPhreak"';
 			ctx.fillText("Coded by sandb.", x, y);
 		}
-		ctx.globalCompositeOperation = "source-over";
 		if (secs > 30) {
+			ctx.globalCompositeOperation = "source-over";
 			fs = (10 + Math.abs(((secs - 30) % 20) - 10)) * 100;
 			for (var i = 0; i < p.length; i++) {
 				q = fisheye(p[i], {x:w/2, y:h/2});
@@ -247,6 +226,8 @@ $(function(){
 			aw.playing = true;
 			aw.play();
 		}
+		//set final composition mode for buffer swapping
+		ctx.globalCompositeOperation = "source-over";
 		setTimeout("draw()", 30);
 	};
 
